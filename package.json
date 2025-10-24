@@ -1,0 +1,17 @@
+{
+  "name": "youtube",
+  "version": "1.0.0",
+  "description": "A Backend Mastery and Build YouTube",
+  "keywords": [
+    "Javascript",
+    "NodeJs",
+    "Backend"
+  ],
+  "license": "ISC",
+  "author": "Pravin Shegamwar",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
