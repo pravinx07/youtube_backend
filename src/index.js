@@ -7,3 +7,10 @@ dotenv.config({
 
 
 connectDB()
+.then(()=>{
+    
+})
+.catch((err)=>{
+    console.log("MONGO DB connection failed !!!");
+    
+})
