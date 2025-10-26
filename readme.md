@@ -6,3 +6,5 @@ not in production
 
 dependencies is important for both development and production
 
+
+jwt is Bearer token is like key of lock
