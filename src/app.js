@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended:true, limit:"16kb"}))
 // t serves static files and is based on serve-static.
 app.use(express.static("public"))
 
-app.use(cookieParser())
+app.use(cookieParser()) // access cookie
 
 // routes import
 
