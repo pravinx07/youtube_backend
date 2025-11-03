@@ -7,12 +7,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
+    console.log("User ",user);
+
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken; // save in db
-    await user.save({ validateBeforeSave: false }); // validate before save
+    await user.save(); // validate before save
     return { accessToken, refreshToken };
   } catch (error) {
+    console.error("token genration error", error);
+    
     throw new ApiError(
       500,
       "something went wrong while generating refresh and access token"
@@ -114,6 +118,8 @@ export const loginUser = asyncHandler(async (req, res) => {
   // take access token from user and compare verify it if it valid give access for login
 
   const { username, email, password } = req.body;
+  console.log(username, email, password);
+
   if (!username || !email) {
     throw new ApiError(400, "username or password is required");
   }
@@ -137,7 +143,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = User.findById(user._id).select(
+  const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
 
@@ -167,7 +173,7 @@ export const logout = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
+      $unset: {
         refreshToken: undefined,
       },
     },
@@ -175,11 +181,13 @@ export const logout = asyncHandler(async (req, res) => {
   );
 
   const options = {
-    httpOnly:true,
-    secure:true
-  }
+    httpOnly: true,
+    secure: true,
+  };
 
-  return res.status(200).clearCookie("accessToken", options)
-  .clearCookie("refreshToken",options)
-  .json(new ApiResponse(200,{},"user logout successfully"))
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "user logout successfully"));
 });
