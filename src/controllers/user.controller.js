@@ -176,7 +176,7 @@ export const logout = asyncHandler(async (req, res) => {
     req.user._id,
     {
       $unset: {
-        refreshToken: undefined,
+        refreshToken: 1, // this remove the field from 
       },
     },
     { new: true }
@@ -245,7 +245,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export const changeCurrentUser = asyncHandler(async (req, res) => {
+export const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
   const user = await User.findById(req.user?._id);
